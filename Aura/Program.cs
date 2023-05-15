@@ -1,4 +1,5 @@
 ﻿using Aura;
+using Aura.Api;
 using Aura.Providers.Spotify;
 
 DotEnv.Load(".env");
@@ -22,12 +23,8 @@ if (!await spotifyClient.ConnectAsync(clientId, clientSecret))
 Console.WriteLine("Successfully authorized with Spotify API...");
 
 var spotifyProvider = new SpotifyApiCurrentTrackProvider(spotifyClient);
-var currentTrack = await spotifyProvider.GetCurrentTrackAsync();
 
-if (currentTrack is null)
-{
-    return;
-}
+var apiServer = new ApiServer();
+var auraService = new AuraApiService(apiServer, spotifyProvider);
 
-Console.WriteLine($"{currentTrack.Artist} - {currentTrack.Name}");
-Console.WriteLine($"BPM: {currentTrack.Bpm}");
+await auraService.Start();

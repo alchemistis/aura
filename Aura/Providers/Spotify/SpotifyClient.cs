@@ -48,7 +48,7 @@ public class SpotifyClient
             return false;
 
         var content = await response.Content.ReadAsStringAsync();
-        using (JsonDocument document = JsonDocument.Parse(content))
+        using (var document = JsonDocument.Parse(content))
         {
             var root = document.RootElement;
 
@@ -71,7 +71,7 @@ public class SpotifyClient
         return result;
     }
 
-    protected async Task<string> GetCodeAsync()
+    private async Task<string> GetCodeAsync()
     {
         var authorizationEndpoint = $"https://accounts.spotify.com/authorize"
             + $"?client_id=" + ClientId
