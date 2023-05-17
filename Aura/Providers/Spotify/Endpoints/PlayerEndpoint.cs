@@ -1,5 +1,6 @@
 ﻿using Aura.Providers.Spotify.Model.Response;
 using System.Text.Json;
+using Aura.Json;
 
 namespace Aura.Providers.Spotify.Endpoints;
 
@@ -11,6 +12,20 @@ public class PlayerEndpoint : SpotifyEndpoint
     {
     }
 
+    public async Task<GetPlaybackStateResponse?> GetPlaybackStateAsync()
+    {
+        var response = await _httpClient.GetAsync(Endpoint);
+        
+        var content = await response.Content.ReadAsStringAsync();
+        var deserializedResponse = JsonSerializer.Deserialize<GetPlaybackStateResponse>(content, new JsonSerializerOptions()
+        {
+            PropertyNamingPolicy = new SnakeCaseNamingPolicy(),
+            PropertyNameCaseInsensitive = true
+        });
+
+        return deserializedResponse;
+    }
+    
     public async Task<GetCurrentlyPlayingTrackResponse?> GetCurrentTrackAsync()
     {
         var response = await _httpClient.GetAsync(Endpoint + "/currently-playing/");

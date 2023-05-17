@@ -13,8 +13,15 @@ public class SpotifyApiCurrentTrackProvider : ICurrentTrackProvider
     {
         var currentTrack = await _spotifyClient.Player.GetCurrentTrackAsync();
         var audioFeatures = await _spotifyClient.Tracks.GetAudioFeatures(currentTrack.Item.Id);
+        var playbackState = await _spotifyClient.Player.GetPlaybackStateAsync();
 
-        var current = new Track(currentTrack.Item?.Name, currentTrack.Item?.Artists?[0].Name, audioFeatures.Tempo);
+        var current = new Track(
+            currentTrack.Item?.Name,
+            currentTrack.Item?.Artists?[0].Name,
+            audioFeatures.Tempo,
+            playbackState.ProgressMs
+        );
+        
         return current;
     }
 }
