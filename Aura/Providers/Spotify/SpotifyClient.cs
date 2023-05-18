@@ -77,7 +77,7 @@ public class SpotifyClient
             + $"?client_id=" + ClientId
             + "&response_type=code"
             + "&redirect_uri=http://localhost:8888/"
-            + "&scope=user-read-currently-playing";
+            + "&scope=user-read-currently-playing%20user-read-playback-state";
 
         var listener = new HttpListener();
         listener.Prefixes.Add("http://localhost:8888/");
@@ -97,7 +97,6 @@ public class SpotifyClient
                     code = ExtractQueryStringParameter(request, "code");
                     if (!string.IsNullOrEmpty(code))
                     {
-                        Console.WriteLine($"code={code}");
                         listener.Stop();
                     }
                 }
